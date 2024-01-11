@@ -350,7 +350,7 @@ plot(1:nclustmax, wss, type = "b", main="WGSS Plot",
      xlab = "Number of Groups", ylab = "Within Groups Sum of Squares (Distance)")
 ```
 
-We observe an 'elbow' at six groups, so we will analyze the three-group k-means solution.
+We observe an 'elbow' at three groups, so we will analyze the three-group k-means solution.
 
 ```{r, fig.width = 6, fig.height = 6}
 set.seed(13)
@@ -506,50 +506,55 @@ The majors that are highly represented by men appear to be many of the least cro
 Now we will analyze the community structure of the networks.
 
 ```{r, fig.width = 6, fig.height = 6}
+set.seed(4)
+
 network <- simplify(g) # simplify graph to remove multi-edges and loops
 E(g)$weight <- count.multiple(g) # extract edge weights
 
 fg <- cluster_fast_greedy(network, weights = E(g)$width)
 sizes(fg)
+groups(fg)
+
 plot(fg, network, main = "Network - Modularity Optimization Algorithm")
 #plot_dendrogram(fg, main = 'Major Network Cluster Dendrogram', ylab = 'Height')
 ```
 
-The solution contains 7 communities. The first three are relatively large, containing 11, 13, and 7 majors, respectively. Communities 4-6 contain pairs of similar majors, including SPAN + LLAS, STAT + MATH, and ARCH + ARHA. It makes sense that these pairs would be highly cross-listed. The last community contains COSC, which is not cross-listed at all.
+The solution contains 5 communities. The first four are relatively large, containing 7, 12, 11, and 7 majors, respectively. The first community contains mostly math/logic related majors (STAT, MATH, PHIL), earth science related majors (ENST, GEOL), and RELI. Communities 2 and 3 are the largest clusters and appear to contain most of the humanities majors. Community 4 contains mostly STEM majors that include the biological and physical sciences: BIOL, BCBP, CHEM, NEUR, PSYC, ASTR, PHYS. Students who are interested in medicine or engineering often major in these fields. The last community contains just one major, COSC, which is not cross-listed at all.
 
 ```{r}
 modularity(network, fg$membership)
 ```
 
-This solution has a modularity of 0.155, indicating that the communities detected from cross-listings exhibit a fairly weak structure. 
+This solution has a modularity of 0.302, indicating that the communities detected from cross-listings exhibit a moderately strong structure. 
 
 Now we will apply the Girvan-Newman edge betweenness algorithm.
 
 ```{r, fig.width = 6, fig.height = 6}
 eb <- cluster_edge_betweenness(network, weights = E(g)$width)
 sizes(eb)
+groups(eb)
 plot(eb, network, main = "Network - Edge Betweenness Algorithm")
 #plot_dendrogram(eb, main = 'Major Network Cluster Dendrogram', ylab = 'Height')
 ```
 
-This solution is made up of only 4 communities. The first community is by far the largest with 24 nodes. This cluster seems to contain almost all of the humanities majors. Communities 2 and 3 are smaller and similarly sized with 6 and 7 nodes, respectively. Community 2 contains mostly STEM majors that include the biological and physical sciences: BIOL, BCBP, CHEM, NEUR, PSYC, ASTR, PHYS. Students who are interested in medicine or engineering often major in these fields. The third community contains mostly math/logic related majors (STAT, MATH, ECON, PHYS) and earth science related majors (ENST, GEOL). The last community contains the lone major, COSC.
+This solution is made up of only 4 communities. The first community is by far the largest with 24 nodes. This cluster seems to contain almost all of the humanities majors. Communities 2 is the second largest with 7 nodes. Community 2 contains mostly STEM majors that include the biological and physical sciences: BIOL, BCBP, CHEM, NEUR, PSYC, ASTR, PHYS. Students who are interested in medicine or engineering often major in these fields. The third community contains only two nodes: STAT and MATH. Communities 4-6 contain only one node each: ECON, COSC, and LJST. Community 7 contains three nodes: ENST, GEOL, and PHIL.
 
 ```{r}
 modularity(network, eb$membership)
 ```
 
-This solution has a modularity of 0.210, indicating that the communities detected from cross-listings exhibit a moderately strong structure.
+This solution has a modularity of 0.210, indicating that the communities detected from cross-listings exhibit a fairly strong structure.
 
-The Girvan-Newman edge betweenness solution yields a slightly larger modularity score than the modularity optimization solution so we conclude that the Girvan-Newman edge betweenness solution is the stronger solution.
+The modularity optimization solution yields a slightly larger modularity score than the Girvan-Newman edge betweenness solution so we conclude that the modularity optimization solution is stronger.
 
 
 \newpage
 
 ## Conclusion 
 
-The first part of this report used a clustering method to identify groups of majors at Amherst College that are demographically similar. The clustering analysis was run on the 6 quantitative variables, male, non-resident (international student), asian, hispanic/latino, black, and white. After comparing k-means and hierarchical clustering techniques, the 3-group k-means solution produced the strongest solution. Although the structure of the clusters were relatively weak overall (silhouette coefficient = 0.28), the solution still grouped all STEM majors in a single cluster (silhouette coefficient = 0.32). The majors at the center of the STEM-dominated cluster were characterized by high asian, non-resident (international) and male representation, as well as low hispanic/latino and black representation. When interpreting this result, it is important to consider that all majors were weighted equally in the clustering analysis despite significant variation in major size. This means that the degree of separation exhibited by the clustering solution is based on the *average major*, not the *average student*. 
+The first part of this report used a clustering method to identify groups of majors at Amherst College that are demographically similar. The clustering analysis was run on the 6 quantitative variables, male, non-resident (international student), asian, hispanic/latino, black, and white. After comparing k-means and hierarchical clustering techniques, the 3-group k-means solution produced the strongest solution. Although the structure of the clusters were relatively weak overall (silhouette coefficient = 0.25), the solution still grouped all STEM majors in a single cluster (silhouette coefficient = 0.26). The majors at the center of the STEM-dominated cluster were characterized by high asian, non-resident (international) and male representation, as well as low hispanic/latino and black representation. When interpreting this result, it is important to consider that all majors were assigned equal weight in the clustering analysis despite significant variation in major size. This means that the degree of separation exhibited by the clustering solution is based on the *average major*, not the *average student*. 
 
-The second portion of this report used a network model to explore the relationship between majors that had cross-listed courses in the 22-23 Amherst Course Catalog. HIST, BLST, SWAG, ARHA, ENGL, FAMS were the most frequently cross-listed majors and COSC was cross-listed zero times, despite being one of the most popular majors at Amherst. After plotting the network, we identified a negative correlation between majors that were highly cross-listed and majors that were highly represented by men. Finally, a community detection algorithm based on edge betweenness detected four clusters with moderately strong structure overall. The first cluster contained 24 humanities majors, the second cluster contained 7 science related majors (BIOL, BCBP, CHEM, NEUR, PSYC, ASTR, PHYS), the third cluster contained mathematical reasoning and earth science related majors (STAT, MATH, ECON, PHIL, GEOL, ENST), and the final cluster singled out COSC. 
+The second portion of this report used a network model to explore the relationship between majors that had cross-listed courses in the 22-23 Amherst Course Catalog. HIST, BLST, SWAG, ARHA, ENGL, FAMS were the most frequently cross-listed majors and COSC was cross-listed zero times, despite being one of the most popular majors at Amherst. After plotting the network, we identified a negative correlation between majors that were highly cross-listed and majors that were highly represented by men. Finally, a community detection algorithm based on modularity optimization detected five clusters with moderately strong structure overall. The largest two clusters contained almost all of the humanities majors. Another cluster contained most of the biological and physical science majors (BIOL, BCBP, CHEM, NEUR, PSYC, ASTR, PHYS), and the final cluster singled out COSC. 
 
 Though we successfully identified all STEM majors in one cluster based on the demographics of students at Amherst College, the structure exhibited in the clustering solution was fairly weak. The sample size of the data is another important limitation to consider. Although we did not identify any glaring inconsistencies across the 4 years, the relatively small sample constrains the accuracy of our data. The variance in major size (total number of degrees conferred) is also a major limitation. As we demonstrated in the preliminary analysis, majors ranged from an average of 3 degrees to 62 degrees conferred per year. This led us to consolidate several of the smallest majors which exposes the data to bias. It is also important to note that over 10% of observations in the original data set were excluded from the analysis because the observations belonged to demographic groups that each made up less than 5% of the sample population. The data for the network analysis, which only contained the 754 courses offered during Amherst's 22-23 school year, was also limited by its sample size. We also note several major limitations to using demographic data from the clustering analysis to decorate the network: 1) the data sets did not represent the same class years 2) EDST and EUST were not included in the IPEDS data base. 
 
