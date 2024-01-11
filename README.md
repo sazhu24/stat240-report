@@ -1,6 +1,6 @@
 ### A Clustering and Network Analysis of Academic Deparments at Amherst College
 Sara Zhu  
-Multivariate Data Analysis (STAT 240)  
+STAT 240  
 Fall 2022   
 
 *Introduction*   
