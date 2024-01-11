@@ -1,4 +1,4 @@
-A Clustering and Network Analysis of Academic Deparments at Amherst College
+###A Clustering and Network Analysis of Academic Deparments at Amherst College
 
 Sara Zhu
 
