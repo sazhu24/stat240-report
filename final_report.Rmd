@@ -93,8 +93,8 @@ In addition to these quantitative variables, my data set includes 3 categorical 
 3) After making these adjustments, I took the 4-year average for each degree category, resulting in a final data set containing 32 observations and 6 quantitative variables. The average number of degrees conferred to each major is shown below.
 
 
-```{r, fig.width = 7, fig.height = 6}
-degree_df %>%
+```{r, fig.width = 7.5, fig.height = 6.4}
+plot <- degree_df %>%
   filter(degree != 'Total') %>% 
   mutate(code = fct_reorder(code, total)) %>%
   ggplot(aes(x = total, y = reorder(code, total), fill = male)) +
@@ -108,7 +108,10 @@ degree_df %>%
         text = element_text(family = "jost"),
         panel.grid.major = element_line(linewidth = 0.7))
 
-
+plot
+png(file = "plots/degrees-plot.png", width = 750, height = 650, units = "px")
+print(plot)
+dev.off()
 ```
 
 
