@@ -99,14 +99,16 @@ degree_df %>%
   mutate(code = fct_reorder(code, total)) %>%
   ggplot(aes(x = total, y = reorder(code, total), fill = male)) +
   geom_bar(position = "stack", stat = "identity", alpha = 0.9) +
-  scale_fill_gradient2(high = '#3992f7', mid = "white", low = '#ff80a6',  
+  scale_fill_gradient2(high = '#3d8ff5', mid = "white", low = '#fa7575', 
                        midpoint = 50, name = "% Male") +
-    labs(title = "Number of Degrees Conferred per Major", 
-         subtitle = "Annual Average Between 2018-2022",
-         x = 'Number of Degrees Conferred', 
-         y = 'Major') +
+  labs(title = "Number of Degrees Conferred per Major (2018-2022)", 
+       x = 'Number of Degrees Conferred per Year', 
+       y = 'Major') +
   theme(axis.text.y = element_text(size = 8.5),
-        text = element_text(family = "jost"))
+        text = element_text(family = "jost"),
+        panel.grid.major = element_line(linewidth = 0.7))
+
+
 ```
 
 
