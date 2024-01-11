@@ -109,7 +109,7 @@ plot <- degree_df %>%
         panel.grid.major = element_line(linewidth = 0.7))
 
 plot
-png(file = "plots/degrees-plot.png", width = 800, height = 730, units = "px")
+png(file = "plots/degrees-plot.png", width = 800, height = 680, units = "px")
 print(plot)
 dev.off()
 ```

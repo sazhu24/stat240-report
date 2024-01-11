@@ -51,7 +51,7 @@ Though we successfully identified all STEM majors in one cluster based on the de
 Given that the IPEDS database and the Amherst Course Catalog both have at least two decades worth of data, it would be interesting to extend this analysis to a wider time frame in the future. The IPEDS database also has the same information for most other colleges and universities, so future analyses could also examine how Amherst compares to its peers (especially other liberal arts colleges). It would also be worthwhile to perform a clustering analysis on course-level data (demographic make up of students in each course).
 
 
-#### References 
+#### Data Sources 
 
 * [U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary EducationData System (IPEDS), 2017-2021, Amherst College: Completions](https://nces.ed.gov/ipeds/datacenter/FacsimileView.aspx?surveyNumber=3&unitId=164465&year=2020)
 
